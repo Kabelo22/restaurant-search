@@ -4,6 +4,20 @@ const axios = require("axios");
 const app = express();
 const port = 3000;
 
+// get name of cuisine only from array of cuisines
+function getCuisines(cuisines) {
+  const cuisineNames = cuisines.map((cuisine) => {
+    return cuisine.name;
+  });
+
+  return cuisineNames;
+}
+
+// construct address string
+function getAddress(address) {
+  return `${address.firstLine}, ${address.city}, ${address.postalCode}`;
+}
+
 // fetch restaurants data from api with a postcode
 app.get("/", async (req, res) => {
   const postCode = req.query.postcode;
@@ -12,7 +26,23 @@ app.get("/", async (req, res) => {
 
   try {
     const response = await axios.get(api);
-    console.log(response);
+    const restaurantsResults = response.data.restaurants;
+
+    // get the first 10 restaurants by using slice method
+    const slicedRestaurants = restaurantsResults.slice(0, 10);
+
+    // loop through slicedRestaurants and only get
+    // required restaurants data points
+    const restaurants = slicedRestaurants.map((restaurant) => {
+      return {
+        name: restaurant.name,
+        cuisines: getCuisines(restaurant.cuisines),
+        rating: restaurant.rating.starRating,
+        address: getAddress(restaurant.address),
+      };
+    });
+
+    res.send(restaurants);
   } catch (error) {
     console.log("Error", error);
   }
