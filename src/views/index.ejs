@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Restaurant Search</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+
+  <body>
+    <h1>Restaurant Search</h1>
+
+    <form action="/" method="get">
+      <label for="postcode">Enter Postcode:</label>
+      <input type="text" id="postcode" name="postcode" />
+      <button type="submit">Search</button>
+    </form>
+
+    <% if (restaurants.length > 0) { %>
+    <h2>Results:</h2>
+    <ol>
+      <% restaurants.forEach(restaurant => { %>
+      <li>
+        <h3><%= restaurant.name %></h3>
+        <p>Cuisines: <%= restaurant.cuisines %></p>
+        <p>Ratings: <%= restaurant.rating %></p>
+        <p>Address: <%= restaurant.address %></p>
+      </li>
+      <hr />
+      <% }); %>
+    </ol>
+    <% } else { %>
+    <p>No restaurants found.</p>
+    <% } %>
+  </body>
+</html>

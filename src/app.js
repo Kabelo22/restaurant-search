@@ -4,6 +4,12 @@ const axios = require("axios");
 const app = express();
 const port = 3000;
 
+app.set("view engine", "ejs");
+app.set("views", __dirname + "/views");
+
+app.use(express.static("public"));
+app.use(express.urlencoded({ extended: true }));
+
 // get name of cuisine only from array of cuisines
 function getCuisines(cuisines) {
   const cuisineNames = cuisines.map((cuisine) => {
@@ -42,13 +48,15 @@ app.get("/", async (req, res) => {
       };
     });
 
-    res.send(restaurants);
+    //return the restuarants to the ejs view
+    res.render("index", { restaurants });
   } catch (error) {
-    console.log("Error", error);
+    console.log("Error:", error.message);
+    res.render("index", { restaurants: [] });
   }
 });
 
 // start the application by listening on a port
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+  console.log(`Server is running on http://localhost:${port}`);
 });
